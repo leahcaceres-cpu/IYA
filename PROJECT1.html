@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory System / POS | Leah A, Caceres</title>
+    <meta name="description" content="Interactive Inventory Management and Point of Sale (POS) demo styled in the Jiya pink portfolio theme.">
+
+    <!-- Google Fonts: Quicksand for body, Pacifico for playful accents -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        accent: ['Pacifico', 'cursive'],
+                    },
+                    colors: {
+                        bubblegum: '#ff77e9',
+                        hotpink: '#ff1493',
+                        pastelpink: '#ffe4e1',
+                        rosegold: '#b76e79'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Theme & Animations -->
+    <style>
+        /* Animated Gradient Background */
+        .animated-bg {
+            background: linear-gradient(-45deg, #ffe4e1, #ffb6c1, #ff69b4, #ffc0cb);
+            background-size: 400% 400%;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .animated-bg {
+                animation: gradientBG 15s ease infinite;
+            }
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Animation */
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .animate-float {
+                animation: none;
+            }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1.5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Pink Glowing Hover Effects */
+        .hover-glow {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-glow:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 10px 25px rgba(255, 20, 147, 0.28);
+        }
+
+        .text-glow:hover {
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+        }
+
+        /* Clean Scrollbar with Pink Theme */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #ffe4e1; }
+        ::-webkit-scrollbar-thumb { background: #ff69b4; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff1493; }
+
+        /* Scroll-Reveal Fade-In Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(24px) scale(0.97);
+            transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1), transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity, transform;
+        }
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+
+        /* Decorative Sparkles */
+        .sparkle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 20px #ff69b4;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Floating Hearts and Bubbles Animation */
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+
+        .floating-item {
+            position: absolute;
+            bottom: -10%;
+            animation: floatUp linear infinite;
+            will-change: transform, opacity;
+            z-index: 0;
+            user-select: none;
+            filter: drop-shadow(0 0 5px rgba(255, 105, 180, 0.3));
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-pink-300 selection:text-pink-900 font-sans text-gray-800 bg-pink-50 relative overflow-x-hidden">
+
+    <!-- Dynamic Background Animation Container -->
+    <div id="bg-animation-container" class="fixed inset-0 pointer-events-none overflow-hidden z-[1]"></div>
+
+    <!-- Header / Navigation -->
+    <header class="fixed w-full top-0 z-50 bg-white/75 backdrop-blur-lg border-b border-pink-200 transition-all duration-300 shadow-[0_4px_30px_rgba(255,192,203,0.3)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="index.html#home" class="font-accent text-3xl font-bold text-hotpink tracking-wide flex items-center gap-2 text-glow transition-all">
+                    ✨Jiya ✨
+                </a>
+
+                <div class="flex items-center gap-3 sm:gap-4">
+                    <a href="index.html#projects" class="hover-glow px-5 py-2.5 rounded-full bg-white text-hotpink border-2 border-pink-200 hover:border-hotpink text-sm font-bold transition-all flex items-center gap-2 shadow-sm">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Back to Projects
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="relative z-10 pt-28 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Decorative Sparkles -->
+        <div class="sparkle w-3 h-3 top-36 left-12" style="animation-delay: 0s;"></div>
+        <div class="sparkle w-4 h-4 top-48 right-16" style="animation-delay: 0.6s;"></div>
+
+        <!-- Header -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center mb-14 fade-in">
+            <div class="bg-white/75 backdrop-blur-md p-8 rounded-[2.5rem] border-2 border-pink-100 shadow-xl">
+                <div class="inline-flex items-center gap-2 mb-4">
+                    <span class="px-4 py-1 bg-pink-100 text-hotpink rounded-full text-xs font-bold shadow-sm">🎀 Featured Project</span>
+                </div>
+
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-3.5 py-1 text-xs font-bold bg-pink-100 text-hotpink rounded-full">Java</span>
+                    <span class="px-3.5 py-1 text-xs font-bold bg-pink-100 text-pink-700 rounded-full">MySQL</span>
+                    <span class="px-3.5 py-1 text-xs font-bold bg-pink-100 text-hotpink rounded-full">HTML</span>
+                    <span class="px-3.5 py-1 text-xs font-bold bg-pink-100 text-pink-700 rounded-full">UI Design</span>
+                </div>
+
+                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 leading-tight">
+                    Inventory System / <span class="font-accent text-hotpink font-normal text-glow">POS</span>
+                </h1>
+
+                <p class="text-gray-600 leading-relaxed mb-6 font-medium">
+                    An inventory management system featuring a Point of Sale (POS) interface, real-time stock updates, low-stock alerts, and sales analytics designed for fast retail checkout and streamlined operations.
+                </p>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="bg-pink-50 p-4 rounded-2xl text-center border border-pink-100 hover-glow">
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Total Sales</p>
+                        <p id="stat-revenue" class="text-xl font-extrabold text-hotpink mt-1">₱0.00</p>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-2xl text-center border border-pink-100 hover-glow delay-100">
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Orders</p>
+                        <p id="stat-orders" class="text-xl font-extrabold text-pink-600 mt-1">0</p>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-2xl text-center border border-pink-100 hover-glow delay-200">
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Low Stock</p>
+                        <p id="stat-lowstock" class="text-xl font-extrabold text-rosegold mt-1">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="fade-in delay-200 animate-float">
+                <div class="relative w-full max-w-xl mx-auto">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-pink-300 to-pastelpink rounded-[2.5rem] mix-blend-multiply filter blur-2xl opacity-60"></div>
+                    <div class="relative bg-white p-4 rounded-[2.5rem] border-4 border-white shadow-[0_20px_50px_rgba(255,105,180,0.3)] transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                        <img src="PROJECT1.png" alt="Inventory System / POS Preview"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                             class="w-full h-72 object-cover rounded-[1.8rem]">
+                        <div class="hidden w-full h-72 rounded-[1.8rem] animated-bg items-center justify-center text-gray-800 font-bold text-sm">
+                            Preview Image (featured1.png) ✨
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Interactive Demo -->
+        <section class="bg-white/85 backdrop-blur-md rounded-[2.5rem] p-6 md:p-8 border-2 border-pink-100 shadow-xl fade-in">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-5 border-b border-pink-100">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-gray-900">Interactive POS &amp; Inventory Demo 💕</h2>
+                    <p class="text-sm text-gray-600 font-medium">Click items to ring up an order, adjust stock in real time, or add new products.</p>
+                </div>
+                <button onclick="toggleAddModal()" class="hover-glow px-6 py-3 rounded-full bg-gradient-to-r from-hotpink to-pink-500 text-white text-sm font-bold shadow-md shadow-pink-300/50 transition">
+                    + Add Product
+                </button>
+            </div>
+
+            <!-- Add Product Form (Collapsible) -->
+            <form id="add-product-form" onsubmit="addNewProduct(event)" class="hidden mb-6 p-5 rounded-3xl bg-pink-50 border-2 border-pink-200 grid grid-cols-1 md:grid-cols-5 gap-3">
+                <input id="new-name" type="text" placeholder="Product Name" required class="px-4 py-2.5 rounded-full bg-white border-2 border-pink-100 text-sm text-gray-900 placeholder-gray-400 font-medium focus:outline-none focus:border-hotpink">
+                <input id="new-category" type="text" placeholder="Category (e.g. Drinks)" required class="px-4 py-2.5 rounded-full bg-white border-2 border-pink-100 text-sm text-gray-900 placeholder-gray-400 font-medium focus:outline-none focus:border-hotpink">
+                <input id="new-price" type="number" step="0.01" min="1" placeholder="Price (₱)" required class="px-4 py-2.5 rounded-full bg-white border-2 border-pink-100 text-sm text-gray-900 placeholder-gray-400 font-medium focus:outline-none focus:border-hotpink">
+                <input id="new-stock" type="number" min="1" placeholder="Initial Stock" required class="px-4 py-2.5 rounded-full bg-white border-2 border-pink-100 text-sm text-gray-900 placeholder-gray-400 font-medium focus:outline-none focus:border-hotpink">
+                <button type="submit" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-hotpink to-pink-500 text-white text-sm font-bold shadow-sm hover:opacity-95 transition">Save Item</button>
+            </form>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Product Catalog -->
+                <div class="lg:col-span-2">
+                    <input id="pos-search" type="text" oninput="renderProducts()" placeholder="Search products by name or category..."
+                           class="w-full mb-5 px-5 py-3 rounded-full bg-pink-50/70 border-2 border-pink-100 text-sm text-gray-900 placeholder-gray-400 font-medium focus:outline-none focus:border-hotpink focus:bg-white transition">
+                    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+                </div>
+
+                <!-- Cart / Checkout -->
+                <div class="bg-gradient-to-br from-white to-pink-50 rounded-[2rem] p-6 border-2 border-pink-100 shadow-inner flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-extrabold text-gray-900 mb-4 flex justify-between items-center">
+                            <span>Current Order 🛍️</span>
+                            <button onclick="clearCart()" class="text-xs text-hotpink hover:underline font-bold">Clear</button>
+                        </h3>
+                        <div id="cart-items" class="space-y-3 max-h-64 overflow-y-auto pr-1 mb-4">
+                            <p class="text-sm text-gray-500 font-medium text-center py-6">Cart is empty. Click a product to add.</p>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-pink-200 pt-4 space-y-2 text-sm font-medium">
+                        <div class="flex justify-between text-gray-600">
+                            <span>Subtotal</span><span id="cart-subtotal" class="font-bold text-gray-800">₱0.00</span>
+                        </div>
+                        <div class="flex justify-between text-gray-600">
+                            <span>VAT (12%)</span><span id="cart-tax" class="font-bold text-gray-800">₱0.00</span>
+                        </div>
+                        <div class="flex justify-between text-gray-900 font-extrabold text-base pt-2 border-t border-pink-200">
+                            <span>Total</span><span id="cart-total" class="text-hotpink">₱0.00</span>
+                        </div>
+                        <button onclick="checkout()" class="hover-glow w-full mt-4 py-3.5 rounded-full bg-gradient-to-r from-hotpink to-pink-500 text-white font-bold shadow-lg shadow-pink-300/50 transition">
+                            Complete Sale 💖
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 bg-pink-100 border-t border-pink-200 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <a href="index.html#home" class="font-accent text-2xl font-bold text-hotpink flex items-center gap-2">
+                ✨JIYA ✨
+            </a>
+            <p class="text-sm text-gray-600 font-bold">&copy; 2024 JIYA.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 px-5 py-3 rounded-full bg-hotpink text-white text-sm font-bold shadow-xl opacity-0 pointer-events-none transition-all duration-300 z-50"></div>
+
+    <script>
+        // Scroll-Reveal Intersection Observer
+        const faders = document.querySelectorAll('.fade-in');
+        const appearOptions = {
+            threshold: 0.12,
+            rootMargin: "0px 0px -40px 0px"
+        };
+        const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('appear');
+                observer.unobserve(entry.target);
+            });
+        }, appearOptions);
+        faders.forEach(fader => appearOnScroll.observe(fader));
+
+        // Dynamic Floating Hearts and Bubbles Background
+        function initFloatingAnimations() {
+            const container = document.getElementById('bg-animation-container');
+            const elements = ['💖', '🌸', '✨', '🫧', '🤍', '🎀', '💕'];
+
+            setInterval(() => {
+                const el = document.createElement('div');
+                el.classList.add('floating-item');
+                el.innerText = elements[Math.floor(Math.random() * elements.length)];
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.fontSize = (Math.random() * 20 + 15) + 'px';
+
+                const duration = Math.random() * 8 + 7;
+                el.style.animationDuration = duration + 's';
+
+                container.appendChild(el);
+
+                setTimeout(() => {
+                    if (el && el.parentNode) {
+                        el.remove();
+                    }
+                }, duration * 1000);
+            }, 400);
+        }
+        window.addEventListener('load', initFloatingAnimations);
+
+        // POS & Inventory Demo Logic
+        let products = [
+            { id: 1, name: 'Wireless Mouse', category: 'Peripherals', price: 650, stock: 12 },
+            { id: 2, name: 'Mechanical Keyboard', category: 'Peripherals', price: 1850, stock: 5 },
+            { id: 3, name: 'USB-C Hub 6-in-1', category: 'Accessories', price: 920, stock: 8 },
+            { id: 4, name: 'Laptop Stand Aluminum', category: 'Accessories', price: 540, stock: 3 },
+            { id: 5, name: '24" IPS Monitor', category: 'Displays', price: 6200, stock: 4 },
+            { id: 6, name: 'Gaming Headset', category: 'Audio', price: 1290, stock: 9 }
+        ];
+        let cart = [];
+        let totalRevenue = 0;
+        let totalOrders = 0;
+
+        function showToast(msg, isError = false) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = `fixed bottom-6 right-6 px-5 py-3 rounded-full text-white text-sm font-bold shadow-xl transition-all duration-300 z-50 ${isError ? 'bg-rose-600' : 'bg-gradient-to-r from-hotpink to-pink-500'}`;
+            setTimeout(() => { t.classList.add('opacity-0', 'pointer-events-none'); }, 2500);
+        }
+
+        function toggleAddModal() {
+            document.getElementById('add-product-form').classList.toggle('hidden');
+        }
+
+        function addNewProduct(e) {
+            e.preventDefault();
+            const name = document.getElementById('new-name').value.trim();
+            const category = document.getElementById('new-category').value.trim();
+            const price = parseFloat(document.getElementById('new-price').value);
+            const stock = parseInt(document.getElementById('new-stock').value);
+            products.unshift({ id: Date.now(), name, category, price, stock });
+            e.target.reset();
+            toggleAddModal();
+            renderProducts();
+            showToast(`Added "${name}" to inventory! ✨`);
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const existing = cart.find(c => c.id === id);
+            const currentQty = existing ? existing.qty : 0;
+
+            if (currentQty >= product.stock) {
+                showToast('Not enough stock available!', true);
+                return;
+            }
+            if (existing) existing.qty++;
+            else cart.push({ ...product, qty: 1 });
+            renderCart();
+        }
+
+        function updateQty(id, delta) {
+            const item = cart.find(c => c.id === id);
+            const product = products.find(p => p.id === id);
+            if (!item) return;
+            const nextQty = item.qty + delta;
+            if (nextQty <= 0) {
+                cart = cart.filter(c => c.id !== id);
+            } else if (nextQty > product.stock) {
+                showToast('Stock limit reached!', true);
+                return;
+            } else {
+                item.qty = nextQty;
+            }
+            renderCart();
+        }
+
+        function clearCart() {
+            cart = [];
+            renderCart();
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showToast('Cart is empty.', true);
+                return;
+            }
+            let subtotal = 0;
+            cart.forEach(item => {
+                const prod = products.find(p => p.id === item.id);
+                if (prod) prod.stock -= item.qty;
+                subtotal += item.price * item.qty;
+            });
+            const grandTotal = subtotal * 1.12;
+            totalRevenue += grandTotal;
+            totalOrders++;
+            cart = [];
+            renderProducts();
+            renderCart();
+            showToast(`Sale completed! Total: ₱${grandTotal.toFixed(2)} 💖`);
+        }
+
+        function renderProducts() {
+            const query = document.getElementById('pos-search').value.toLowerCase();
+            const grid = document.getElementById('product-grid');
+            const filtered = products.filter(p =>
+                p.name.toLowerCase().includes(query) || p.category.toLowerCase().includes(query)
+            );
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="p-4 rounded-2xl bg-pink-50/70 border-2 border-pink-100 hover:border-hotpink/60 hover:bg-white transition flex flex-col justify-between shadow-sm">
+                    <div class="flex justify-between items-start mb-2 gap-2">
+                        <div>
+                            <span class="text-xs text-hotpink font-bold">${p.category}</span>
+                            <h4 class="font-extrabold text-gray-900">${p.name}</h4>
+                        </div>
+                        <span class="text-xs px-2.5 py-1 rounded-full font-bold shrink-0 ${p.stock === 0 ? 'bg-red-100 text-red-600' : p.stock <= 3 ? 'bg-amber-100 text-amber-700' : 'bg-pink-100 text-hotpink'}">
+                            ${p.stock === 0 ? 'Out of stock' : `Stock: ${p.stock}`}
+                        </span>
+                    </div>
+                    <div class="flex justify-between items-center mt-3">
+                        <span class="text-lg font-extrabold text-gray-900">₱${p.price.toLocaleString('en-PH', {minimumFractionDigits: 2})}</span>
+                        <button onclick="addToCart(${p.id})" ${p.stock === 0 ? 'disabled' : ''}
+                                class="px-4 py-1.5 rounded-full text-xs font-bold transition ${p.stock === 0 ? 'bg-gray-200 text-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-hotpink to-pink-500 text-white shadow-sm hover:opacity-95'}">
+                            + Add
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            const lowStockCount = products.filter(p => p.stock <= 3).length;
+            document.getElementById('stat-revenue').textContent = `₱${totalRevenue.toLocaleString('en-PH', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('stat-orders').textContent = totalOrders;
+            document.getElementById('stat-lowstock').textContent = lowStockCount;
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items');
+            if (cart.length === 0) {
+                container.innerHTML = `<p class="text-sm text-gray-500 font-medium text-center py-6">Cart is empty. Click a product to add.</p>`;
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="flex justify-between items-center bg-white p-3 rounded-2xl border border-pink-100 shadow-sm">
+                        <div>
+                            <p class="text-sm font-bold text-gray-900">${item.name}</p>
+                            <p class="text-xs text-gray-500 font-medium">₱${item.price.toFixed(2)} each</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateQty(${item.id}, -1)" class="w-7 h-7 rounded-full bg-pink-100 hover:bg-pink-200 text-hotpink font-bold text-xs">-</button>
+                            <span class="text-sm font-extrabold text-gray-900 w-5 text-center">${item.qty}</span>
+                            <button onclick="updateQty(${item.id}, 1)" class="w-7 h-7 rounded-full bg-pink-100 hover:bg-pink-200 text-hotpink font-bold text-xs">+</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+            const tax = subtotal * 0.12;
+            const total = subtotal + tax;
+            document.getElementById('cart-subtotal').textContent = `₱${subtotal.toFixed(2)}`;
+            document.getElementById('cart-tax').textContent = `₱${tax.toFixed(2)}`;
+            document.getElementById('cart-total').textContent = `₱${total.toFixed(2)}`;
+        }
+
+        renderProducts();
+        renderCart();
+    </script>
+</body>
+</html>

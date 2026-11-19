@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vibrant professional portfolio of Leah A, Caceres. Showcasing advanced software engineering and game modifications.">
+    <meta name="author" content="Leah A, Caceres">
+    <title>Leah A, Caceres | Software Engineer</title>
+    
+    <!-- Google Fonts: Quicksand for body, Pacifico for playful accents -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        accent: ['Pacifico', 'cursive'],
+                    },
+                    colors: {
+                        bubblegum: '#ff77e9',
+                        hotpink: '#ff1493',
+                        pastelpink: '#ffe4e1',
+                        rosegold: '#b76e79'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Custom CSS for Extensive Animations -->
+    <style>
+        /* Animated Gradient Background */
+        .animated-bg {
+            background: linear-gradient(-45deg, #ffe4e1, #ffb6c1, #ff69b4, #ffc0cb);
+            background-size: 400% 400%;
+        }
+        @media (prefers-reduced-motion: no-preference) {
+            .animated-bg {
+                animation: gradientBG 15s ease infinite;
+            }
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Floating Animation for Hero Graphic */
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .animate-float {
+                animation: none;
+            }
+        }
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        /* Pink Glowing Hover Effects */
+        .hover-glow {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-glow:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 25px rgba(255, 20, 147, 0.4); /* Hot pink glow */
+        }
+        
+        .text-glow:hover {
+            text-shadow: 0 0 10px rgba(255, 105, 180, 0.8);
+        }
+
+        /* Clean Scrollbar with Pink Theme */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #ffe4e1; }
+        ::-webkit-scrollbar-thumb { background: #ff69b4; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff1493; }
+
+        /* Scroll-Reveal Fade-In Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity, transform;
+        }
+        .fade-in.appear {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        
+        /* Decorative Sparkles */
+        .sparkle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #fff, 0 0 20px #ff69b4;
+            animation: twinkle 2s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Floating Hearts and Bubbles Animation */
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0.5) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(360deg); opacity: 0; }
+        }
+        
+        .floating-item {
+            position: absolute;
+            bottom: -10%;
+            animation: floatUp linear infinite;
+            will-change: transform, opacity;
+            z-index: 0;
+            user-select: none;
+            filter: drop-shadow(0 0 5px rgba(255,105,180,0.3));
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-pink-300 selection:text-pink-900 font-sans text-gray-800 bg-pink-50 relative">
+
+    <!-- Dynamic Background Animation Container -->
+    <div id="bg-animation-container" class="fixed inset-0 pointer-events-none overflow-hidden z-[1]"></div>
+
+    <!-- Header / Navigation -->
+    <header class="fixed w-full top-0 z-50 bg-white/70 backdrop-blur-lg border-b border-pink-200 transition-all duration-300 shadow-[0_4px_30px_rgba(255,192,203,0.3)]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#home" class="font-accent text-3xl font-bold text-hotpink tracking-wide flex items-center gap-2 text-glow transition-all">
+                        ✨Jiya ✨
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-base font-bold text-gray-600 hover:text-hotpink transition-all hover:-translate-y-1 inline-block">Home</a>
+                    <a href="#about" class="text-base font-bold text-gray-600 hover:text-hotpink transition-all hover:-translate-y-1 inline-block">About</a>
+                    <a href="#projects" class="text-base font-bold text-gray-600 hover:text-hotpink transition-all hover:-translate-y-1 inline-block">Projects</a>
+                    <a href="#contact" class="text-base font-bold text-gray-600 hover:text-hotpink transition-all hover:-translate-y-1 inline-block">Contact</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-hotpink focus:outline-none p-2" aria-label="Toggle Menu">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-md border-t border-pink-100 shadow-xl absolute w-full">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#home" class="block px-4 py-3 rounded-2xl text-base font-bold text-gray-600 hover:text-hotpink hover:bg-pink-50 transition-colors">Home</a>
+                <a href="#about" class="block px-4 py-3 rounded-2xl text-base font-bold text-gray-600 hover:text-hotpink hover:bg-pink-50 transition-colors">About</a>
+                <a href="#projects" class="block px-4 py-3 rounded-2xl text-base font-bold text-gray-600 hover:text-hotpink hover:bg-pink-50 transition-colors">Projects & Certs</a>
+                <a href="#contact" class="block px-4 py-3 rounded-2xl text-base font-bold text-gray-600 hover:text-hotpink hover:bg-pink-50 transition-colors">Contact</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section id="home" class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden animated-bg min-h-[90vh] flex items-center">
+            <!-- Decorative Sparkles -->
+            <div class="sparkle w-3 h-3 top-1/4 left-1/4" style="animation-delay: 0s;"></div>
+            <div class="sparkle w-4 h-4 top-1/3 right-1/4" style="animation-delay: 0.5s;"></div>
+            <div class="sparkle w-2 h-2 bottom-1/4 left-1/3" style="animation-delay: 1s;"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Text Content -->
+                    <div class="order-2 lg:order-1 flex flex-col justify-center text-center lg:text-left fade-in bg-white/40 p-8 rounded-[3rem] backdrop-blur-sm border border-white/50 shadow-xl relative z-10">
+                        <div class="inline-flex items-center justify-center lg:justify-start gap-2 mb-4">
+                            <span class="px-4 py-1.5 bg-white text-hotpink rounded-full text-sm font-bold shadow-sm">🎀 BSIT Student</span>
+                        </div>
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mb-4">
+                            Hi, I'm <span class="font-accent text-hotpink text-glow font-normal">Leah Caceres!</span><br>
+                        </h1>
+                        <p class="text-lg text-gray-700 mb-8 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
+                            3rd Year Information Technology Student "Aspiring IT Professional | Future Web Developer"
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                            <a href="#projects" class="hover-glow inline-flex justify-center items-center px-8 py-4 text-base font-bold rounded-full text-white bg-gradient-to-r from-hotpink to-pink-500 shadow-lg shadow-pink-300/50">
+                                See My Projects 🚀
+                            </a>
+                            <a href="#contact" class="hover-glow inline-flex justify-center items-center px-8 py-4 text-base font-bold rounded-full text-hotpink bg-white border-2 border-pink-200 shadow-md">
+                                Say Hello! 💕
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating Hero Image -->
+                    <div class="order-1 lg:order-2 flex justify-center fade-in delay-200">
+                        <div class="relative w-full max-w-md aspect-square animate-float">
+                            <!-- Blob shape background -->
+                            <div class="absolute inset-0 bg-gradient-to-tr from-pink-300 to-pastelpink rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-pulse"></div>
+                            
+                            <!-- Main Image Container -->
+                            <div class="relative w-full h-full rounded-[40%] overflow-hidden border-8 border-white shadow-[0_20px_50px_rgba(255,105,180,0.5)] bg-white transform rotate-3">
+                                <img src="leah.jpg" alt="Isabella Rose" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="py-24 lg:py-32 bg-white relative overflow-hidden">
+            <!-- Decorative circle -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-pink-50 rounded-full mix-blend-multiply filter blur-3xl opacity-70 translate-x-1/2 -translate-y-1/2"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    
+                    <div class="fade-in order-2 lg:order-1">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div class="bg-pink-50 rounded-[2rem] p-2 shadow-inner border-2 border-pink-100 overflow-hidden transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                                <img src="PIC2.jpg" alt="Pink Workspace" class="w-full h-full object-cover rounded-[1.5rem]">
+                            </div>
+                            <div class="bg-pink-50 rounded-[2rem] p-2 shadow-inner border-2 border-pink-100 overflow-hidden transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                                <img src="PIC1.jpg" alt="Pink Workspace" class="w-full h-full object-cover rounded-[1.5rem]">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="fade-in delay-200 order-1 lg:order-2">
+                        <h2 class="font-accent text-3xl text-hotpink mb-2 text-glow">ABOUT ME...</h2>
+                        <h3 class="text-4xl lg:text-2xl font-extrabold text-gray-900 mb-6"><span class="text-pink-400">3rd year student</span></h3>
+                        <p class="text-gray-600 leading-relaxed mb-6 font-medium text-lg">
+                            Hi! I'm a 3rd-year Bachelor of Science in Information Technology student with a passion for technology, programming, and exploring innovative solutions. 
+                            My core focus lies in software development, system architecture, and creating user-centric digital experiences. 
+                            I enjoy learning new technologies, developing my technical skills, and creating projects that help me grow as a future IT professional.
+                        </p>
+                        
+                        <!-- About Details -->
+                        <div class="grid grid-cols-2 gap-4 mt-6">
+                            <div class="bg-pink-50 p-4 rounded-xl">
+                                <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Hobby</p>
+                                <p class="font-bold text-gray-800">SLEEPING</p>
+                            </div>
+                            <div class="bg-pink-50 p-4 rounded-xl">
+                                <p class="text-xs text-gray-500 font-bold uppercase tracking-wider">Interests</p>
+                                <p class="font-bold text-gray-800">DRINKING COFFEE</p>
+                            </div>
+                        </div>
+
+                        <!-- Certificates -->
+                        <div class="mt-8">
+                            <h4 class="text-xl font-bold text-gray-900 mb-4">Certificates</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-pink-50 p-3 rounded-lg border border-pink-100">
+                                    <a href="CERT1.png" target="_blank">
+                                        <p class="font-bold text-gray-800 text-sm">Cloud IoT Cybersecurity</p>
+                                        <p class="text-[10px] text-gray-500">Sept 22, 2026</p>
+                                    </a>
+                                </div>
+                                <div class="bg-pink-50 p-3 rounded-lg border border-pink-100">
+                                    <a href="CERT2.png" target="_blank">
+                                        <p class="font-bold text-gray-800 text-sm">Networking & Data Security</p>
+                                        <p class="text-[10px] text-gray-500">Sept 16, 2026</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS & CERTIFICATES SECTION -->
+        <section id="projects" class="py-24 lg:py-32 bg-pink-50/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Section Header -->
+                <div class="text-center mb-16 fade-in">
+                    <h2 class="font-accent text-3xl text-hotpink mb-2 text-glow">MY PORTFOLIO</h2>
+                    <h3 class="text-1xl lg:text-2xl font-extrabold text-gray-900">Previews Projects</h3>
+                    <div class="w-24 h-2 bg-gradient-to-r from-pink-300 to-hotpink mx-auto mt-6 rounded-full"></div>
+                </div>
+
+                <!-- Projects Grid -->
+                <div class="flex justify-center mb-24">
+                    
+                    <!-- Project Card 1: POS System -->
+                    <article class="max-w-lg w-full bg-white rounded-[2.5rem] overflow-hidden shadow-lg border-2 border-pink-100 hover-glow fade-in flex flex-col h-full">
+                    <!-- Image -->
+                    <div class="relative h-64 bg-slate-800 overflow-hidden p-4">
+                        <img src="PROJECT1.png" alt="Enterprise Inventory System" class="w-full h-full object-cover rounded-[1.5rem] transition-transform duration-500 hover:scale-105">
+                    </div>
+                    <!-- Content -->
+                    <div class="p-8 flex-grow flex flex-col">
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-4 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full">Html</span>
+                            <span class="px-4 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full">Java</span>
+                            <span class="px-4 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full">MySQL</span>
+                            <span class="px-4 py-1 bg-slate-100 text-slate-700 text-xs font-bold rounded-full">UI Design</span>
+                        </div>
+                        <h3 class="text-2xl font-extrabold text-gray-900 mb-3">Inventory System/ POS</h3>
+                        <p class="text-gray-600 text-base mb-6 flex-grow leading-relaxed">
+                            A inventory management system featuring a POS interface, real-time stock updates, and detailed sales analytics for streamlined operations.
+                        </p>
+                        <a href="PROJECT1.html" class="inline-flex items-center justify-center w-full py-3 text-sm font-bold text-white bg-slate-800 hover:bg-slate-900 rounded-xl transition-colors shadow-md">
+                            View Details 🚀
+                        </a>
+                    </div>
+                </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT SECTION -->
+        <section id="contact" class="py-24 lg:py-32 bg-white relative">
+            <!-- Decorative elements -->
+            <div class="absolute top-20 left-10 text-4xl animate-bounce" style="animation-duration: 3s;">🌸</div>
+            <div class="absolute bottom-20 right-10 text-4xl animate-float">✨</div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                    
+                    <!-- Contact Info -->
+                    <div class="lg:col-span-5 fade-in">
+                        <h2 class="font-accent text-3xl text-hotpink mb-2 text-glow">Get in Touch</h2>
+                        <h3 class="text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6">Let's build something <span class="text-pink-400">magical.</span></h3>
+                        <p class="text-gray-600 mb-10 text-lg font-medium leading-relaxed">
+                            Need a custom POS system? Want to collaborate on a game mod? Or just want to talk about the best pink hex codes? Send me a message!
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="flex items-center p-4 bg-pink-50 rounded-2xl border border-pink-100 hover-glow">
+                                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-xl shadow-sm mr-4 shrink-0">
+                                    💌
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Email</p>
+                                    <a href="mailto:caceresleah6@gmail.com" class="text-lg font-bold text-gray-900 hover:text-hotpink transition-colors">caceresleah6@gmail.com</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 bg-pink-50 rounded-2xl border border-pink-100 hover-glow delay-100">
+                                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-xl shadow-sm mr-4 shrink-0">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Phone number</p>
+                                    <p class="text-lg font-bold text-gray-900">09972132824</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center p-4 bg-pink-50 rounded-2xl border border-pink-100 hover-glow delay-100">
+                                <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-xl shadow-sm mr-4 shrink-0">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874V12h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Facebook</p>
+                                    <a href="https://www.facebook.com/Seereah" target="_blank" class="text-lg font-bold text-gray-900 hover:text-hotpink transition-colors">LEAH CACERES</a>
+                                    
+                                </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form -->
+                    <div class="lg:col-span-7 fade-in delay-200">
+                        <div class="bg-gradient-to-br from-white to-pink-50 p-8 sm:p-10 rounded-[3rem] shadow-[0_20px_50px_rgba(255,192,203,0.3)] border-2 border-pink-200">
+                            <form id="contactForm" class="space-y-6" onsubmit="event.preventDefault(); showSuccessMessage();">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label for="name" class="block text-sm font-bold text-gray-700 mb-2 ml-2">Your Name</label>
+                                        <input type="text" id="name" name="name" required class="w-full px-6 py-4 rounded-full border-2 border-pink-100 focus:border-hotpink focus:ring-4 focus:ring-pink-100 outline-none transition-all bg-white text-gray-900 placeholder-gray-400 font-medium shadow-inner" placeholder="LEAH CACERES">
+                                    </div>
+                                    <div>
+                                        <label for="email" class="block text-sm font-bold text-gray-700 mb-2 ml-2">Email Address</label>
+                                        <input type="email" id="email" name="email" required class="w-full px-6 py-4 rounded-full border-2 border-pink-100 focus:border-hotpink focus:ring-4 focus:ring-pink-100 outline-none transition-all bg-white text-gray-900 placeholder-gray-400 font-medium shadow-inner" placeholder="LEAH CACERES"@dreamhouse.com">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="message" class="block text-sm font-bold text-gray-700 mb-2 ml-2">Your Message</label>
+                                    <textarea id="message" name="message" rows="4" required class="w-full px-6 py-4 rounded-[2rem] border-2 border-pink-100 focus:border-hotpink focus:ring-4 focus:ring-pink-100 outline-none transition-all bg-white resize-none text-gray-900 placeholder-gray-400 font-medium shadow-inner" placeholder="Let's build something awesome..."></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-gradient-to-r from-hotpink to-pink-500 hover:from-pink-500 hover:to-hotpink text-white font-bold text-lg py-4 px-6 rounded-full transition-all duration-300 shadow-[0_10px_20px_rgba(255,20,147,0.3)] hover:shadow-[0_15px_25px_rgba(255,20,147,0.5)] hover:-translate-y-1 transform focus:outline-none">
+                                    Send Message 💖
+                                </button>
+                                
+                                <!-- Success Message Alert -->
+                                <div id="successMessage" class="hidden text-center p-4 bg-green-50 text-green-600 rounded-full text-sm font-bold border-2 border-green-200 transition-all shadow-sm">
+                                    ✨ Yay! Your message was sent successfully! I'll reply soon. ✨
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Clean, Cute Footer -->
+    <footer class="bg-pink-100 border-t border-pink-200 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                
+                <div class="text-center md:text-left">
+                    <a href="#home" class="font-accent text-2xl font-bold text-hotpink flex items-center justify-center md:justify-start gap-2 mb-2">
+                        ✨JIYA ✨
+                    </a>
+                    <p class="text-sm text-gray-600 font-bold">&copy; 2024 JIYA.</p>
+                </div>
+                
+                <div class="flex gap-4">
+                    <!-- Social Icons -->
+                    <a href="#" class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-pink-400 hover:bg-hotpink hover:text-white transition-all shadow-sm hover-glow text-xl" aria-label="GitHub">
+                        👾
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-pink-400 hover:bg-hotpink hover:text-white transition-all shadow-sm hover-glow text-xl" aria-label="LinkedIn">
+                        💼
+                    </a>
+                    <a href="#" class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-pink-400 hover:bg-hotpink hover:text-white transition-all shadow-sm hover-glow text-xl" aria-label="Twitter">
+                        🐦
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Close mobile menu on link click
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Intersection Observer for Scroll Animations
+        const faders = document.querySelectorAll('.fade-in');
+        
+        const appearOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const appearOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) {
+                    return;
+                } else {
+                    entry.target.classList.add('appear');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, appearOptions);
+
+        faders.forEach(fader => {
+            appearOnScroll.observe(fader);
+        });
+
+        // Dynamic Floating Hearts and Bubbles Background
+        function initFloatingAnimations() {
+            const container = document.getElementById('bg-animation-container');
+            // Array of cute emojis to float around
+            const elements = ['💖', '🌸', '✨', '🫧', '🤍', '🎀', '💕'];
+            
+            // Create a new floating element every 400ms
+            setInterval(() => {
+                const el = document.createElement('div');
+                el.classList.add('floating-item');
+                el.innerText = elements[Math.floor(Math.random() * elements.length)];
+                
+                // Randomize horizontal position, size, and animation duration
+                el.style.left = Math.random() * 100 + 'vw';
+                el.style.fontSize = (Math.random() * 20 + 15) + 'px'; // Size between 15px and 35px
+                
+                const duration = Math.random() * 8 + 7; // Float duration between 7s and 15s
+                el.style.animationDuration = duration + 's';
+                
+                container.appendChild(el);
+                
+                // Clean up after animation finishes to prevent DOM bloat
+                setTimeout(() => {
+                    if (el && el.parentNode) {
+                        el.remove();
+                    }
+                }, duration * 1000);
+            }, 400);
+        }
+        
+        // Start floating animations on window load
+        window.addEventListener('load', initFloatingAnimations);
+
+        // Cute Form Submission Simulation
+        function showSuccessMessage() {
+            const form = document.getElementById('contactForm');
+            const successMsg = document.getElementById('successMessage');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            
+            // Change button state
+            submitBtn.innerHTML = `Sending Magic... ✨`;
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-80', 'cursor-wait');
+
+            // Simulate network delay
+            setTimeout(() => {
+                form.reset();
+                submitBtn.innerHTML = 'Send Message 💖';
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-80', 'cursor-wait');
+                
+                successMsg.classList.remove('hidden');
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    successMsg.classList.add('hidden');
+                }, 5000);
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
